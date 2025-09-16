@@ -1,58 +1,89 @@
 <?php
 session_start();
+
 include 'conexao.php';
 
-if (!isset($_SESSION['codigo_validado']) || !$_SESSION['codigo_validado']) {
-    header("Location: recuperar-senha.php");
-    exit;
+if ($conexao->connect_error) {
+    die("Falha na conexão: " . $conexao->connect_error);
 }
+
+$success = "";
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nova_senha = $_POST['senha'];
-    $senha_hash = password_hash($nova_senha, PASSWORD_DEFAULT);
-    $email = $_SESSION['email_recovery'];
+    $novaSenha = $_POST['senha'];
+    $email = $_SESSION['email_recovery'] ?? "";
 
-    $sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("ss", $senha_hash, $email);
+    if (!empty($email)) {
+        // Criptografa a senha
+        $senha_hash = password_hash($novaSenha, PASSWORD_DEFAULT);
 
-    if ($stmt->execute()) {
-        session_unset();
-        session_destroy();
-        echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Senha redefinida!',
-                confirmButtonText: 'Voltar ao login'
-            }).then(() => window.location.href = '../index.php');
-        </script>";
-        exit;
+        // Atualiza no banco
+        $sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("ss", $senha_hash, $email);
+
+        if ($stmt->execute() && $stmt->affected_rows > 0) {
+            $success = "Senha redefinida com sucesso para <b>$email</b>!";
+            session_destroy();
+        } else {
+            $error = "Não foi possível atualizar a senha. Verifique se o email existe.";
+        }
+
+        $stmt->close();
     } else {
-        echo "Erro ao atualizar senha: " . $stmt->error;
+        $error = "Sessão expirada. Refaça o processo de recuperação.";
     }
-    $stmt->close();
-    $conexao->close();
 }
-?>
 
+$conexao->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Redefinir senha</title>
+    <title>Redefinir Senha</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .msg-sucesso {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .msg-erro {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="body-cadastro-login">
     <div class="container-cadastro-login">
-        <h1 class="h1-login-cadastro">Crie uma nova senha</h1>
-        <form method="POST">
-            <label class="label-form" for="senha">Nova senha:</label>
-            <input class="input-form" type="password" id="senha" name="senha" placeholder="Digite sua nova senha" required>
-            <div class="alinhamento-button">
-                <button class="button-entrar" type="submit">Redefinir senha</button>
-            </div>
-        </form>
+        <h1 class="h1-login-cadastro">Redefinir Senha</h1>
+
+        <?php if ($success): ?>
+            <div class="msg-sucesso"><?= $success ?></div>
+            <a class="button-entrar" href="../index.php">Voltar ao login</a>
+        <?php elseif ($error): ?>
+            <div class="msg-erro"><?= $error ?></div>
+            <a class="button-entrar" href="../recuperar-senha.php">Tentar novamente</a>
+        <?php else: ?>
+            <form method="POST">
+                <label class="label-form" for="senha">Nova senha:</label>
+                <input class="input-form" type="password" id="senha" name="senha" required>
+                <div class="alinhamento-button">
+                    <button class="button-entrar" type="submit">Salvar nova senha</button>
+                </div>
+            </form>
+        <?php endif; ?>
     </div>
 </body>
 </html>
