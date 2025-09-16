@@ -56,29 +56,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/style.css">
-        <title>Login</title>
-    </head>
-    <body class="body-cadastro-login">
-       <div class="container-cadastro-login">
-        <form class="form-cadastro-login" action="" method="POST">
-            <img class="logo-linkup" src="./img/logo-com-nome.png" alt="">
-            <h1 class="h1-login-cadastro">Entrar na sua conta</h1>
-            <div class="linha"></div>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container-cadastro-login">
+        <img class="logo-linkup" src="./img/logo-com-nome.png" alt="Logo LinkUp">
+        <h1 class="h1-login-cadastro">Entrar na sua conta</h1>
+        <form action="" method="POST">
             <label class="label-form" for="email">Email:</label>
-            <input class="input-form" type="email" id="email" name="email" required>
+            <input class="input-form" type="email" id="email" name="email" placeholder="Digite seu email" required>
+
             <label class="label-form" for="senha">Senha:</label>
-            <input class="input-form" type="password" id="senha" name="senha" required>
+            <input class="input-form" type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+
             <div class="alinhamento-button">
                 <button class="button-entrar" type="submit">Entrar</button>
             </div>
-            <a id="texto-cadastro" href="./php/esqueceu-senha.php">Esqueceu a senha?</a>
-            <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Fazer seu cadastro</a>
         </form>
-       </div>
-    </body>
+        <a id="texto-cadastro" href="./php/recuperar-senha.php">Esqueceu a senha?</a>
+        <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Cadastre-se</a>
+    </div>
+</body>
 </html>
