@@ -5,9 +5,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
+    // Criptografa a senha
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $sql_verifica = "SELECT id FROM usuarios WHERE email= ?";
+    // Verifica se o e-mail já está cadastrado
+    $sql_verifica = "SELECT id_usuario FROM usuarios WHERE email_usuario = ?";
     $stmt_verifica = $conexao->prepare($sql_verifica);
     $stmt_verifica->bind_param("s", $email);
     $stmt_verifica->execute();
@@ -33,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $sql = "INSERT INTO usuarios (email, senha) VALUES (?, ?)";
+    // Insere o novo usuário
+    $sql = "INSERT INTO usuarios (email_usuario, senha_usuario) VALUES (?, ?)";
     $stmt = $conexao->prepare($sql);
 
     if ($stmt) {
@@ -51,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         icon: 'success',
                         title: 'Sucesso!',
                         text: 'Administrador cadastrado com sucesso!'
-                    }).then(() => window.location.href = '../index.php'); // redireciona para login
+                    }).then(() => window.location.href = '../index.php');
                 </script>
             </body>
             </html>";
@@ -68,29 +71,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/style.css">
-        <title>Cadastro</title>
-    </head>
-    <body class="body-cadastro-login">
-       <div class="container-cadastro-login">
-        <form class="form-cadastro-login" action="" method="POST">
-            <img class="logo-linkup" src="../img/logo-com-nome.png" alt="">
-            <h1 class="h1-login-cadastro">Criar uma conta</h1>
-            <label class="label-form" for="email">Email:</label>
-            <input class="input-form" type="email" id="email" name="email" required>
-            <label class="label-form" for="senha">Senha:</label>
-            <input class="input-form" type="password" id="senha" name="senha" required>
-            <div class="alinhamento-button">
-                <button class="button-entrar" type="submit">Cadastrar</button>
-            </div>
-            <a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a>
-        </form>
-       </div>
-    </body>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Cadastro - LinkUp</title>
+</head>
+<body class="body-cadastro-login">
+   <div class="container-cadastro-login">
+    <form class="form-cadastro-login" action="" method="POST">
+        <img class="logo-linkup" src="../img/logo-com-nome.png" alt="Logo LinkUp">
+        <h1 class="h1-login-cadastro">Criar uma conta</h1>
+        <label class="label-form" for="email">Email:</label>
+        <input class="input-form" type="email" id="email" name="email" required>
+        <label class="label-form" for="senha">Senha:</label>
+        <input class="input-form" type="password" id="senha" name="senha" required>
+        <div class="alinhamento-button">
+            <button class="button-entrar" type="submit">Cadastrar</button>
+        </div>
+        <a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a>
+    </form>
+   </div>
+</body>
 </html>
