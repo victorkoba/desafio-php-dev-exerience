@@ -55,11 +55,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="pt-br">
+=======
+<html lang="pt-BR">
+>>>>>>> 48994870217367e815d79878fd26e472f9a90bc2
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
+<<<<<<< HEAD
     <title>Login - LinkUp</title>
 </head>
 <body class="body-cadastro-login">
@@ -78,5 +83,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Fazer cadastro</a>
     </form>
    </div>
+=======
+    <title>Login</title>
+</head>
+<body>
+    <div class="container-cadastro-login">
+        <img class="logo-linkup" src="./img/logo-com-nome.png" alt="Logo LinkUp">
+        <h1 class="h1-login-cadastro">Entrar na sua conta</h1>
+        <form action="" method="POST">
+            <label class="label-form" for="email">Email:</label>
+            <input class="input-form" type="email" id="email" name="email" placeholder="Digite seu email" required>
+
+            <label class="label-form" for="senha">Senha:</label>
+            <input class="input-form" type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+
+            <div class="alinhamento-button">
+                <button class="button-entrar" type="submit">Entrar</button>
+            </div>
+        </form>
+        <a id="texto-cadastro" href="./php/recuperar-senha.php">Esqueceu a senha?</a>
+        <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Cadastre-se</a>
+    </div>
+>>>>>>> 48994870217367e815d79878fd26e472f9a90bc2
 </body>
 </html>
