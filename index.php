@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['senha'];
 
-    $sql = "SELECT * FROM usuarios WHERE email_usuario = ?";
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $conexao->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -15,12 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        if (password_verify($password, $user['senha_usuario'])) {
+        if (password_verify($password, $user['senha'])) {
             $_SESSION['usuario'] = $user['nome_usuario'];
             $_SESSION['id_usuario'] = $user['id'];
             $_SESSION['tipo'] = $user['type'];
 
-            header('Location: ./php/visualizar-tarefas.php');
+            header('Location: ./php/feed.php');
             exit;
         } else {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body class="body-cadastro-login">
        <div class="container-cadastro-login">
         <form class="form-cadastro-login" action="" method="POST">
-            <img class="logo-tasksync" src="./img/logo-tasksync.png" alt="">
+            <img class="logo-linkup" src="./img/logo-com-nome.png" alt="">
             <h1 class="h1-login-cadastro">Entrar na sua conta</h1>
             <div class="linha"></div>
             <label class="label-form" for="email">Email:</label>
@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="alinhamento-button">
                 <button class="button-entrar" type="submit">Entrar</button>
             </div>
+            <a id="texto-cadastro" href="./php/esqueceu-senha.php">Esqueceu a senha?</a>
             <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Fazer seu cadastro</a>
         </form>
        </div>

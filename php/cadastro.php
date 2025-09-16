@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $sql_verifica = "SELECT id_usuario FROM usuarios WHERE email_usuario = ?";
+    $sql_verifica = "SELECT id FROM usuarios WHERE email= ?";
     $stmt_verifica = $conexao->prepare($sql_verifica);
     $stmt_verifica->bind_param("s", $email);
     $stmt_verifica->execute();
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $sql = "INSERT INTO usuarios (email_usuario, senha_usuario) VALUES (?, ?)";
+    $sql = "INSERT INTO usuarios (email, senha) VALUES (?, ?)";
     $stmt = $conexao->prepare($sql);
 
     if ($stmt) {
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <body class="body-cadastro-login">
        <div class="container-cadastro-login">
         <form class="form-cadastro-login" action="" method="POST">
-            <img class="logo-tasksync" src="../img/logo-tasksync.png" alt="">
+            <img class="logo-linkup" src="../img/logo-com-nome.png" alt="">
             <h1 class="h1-login-cadastro">Criar uma conta</h1>
             <label class="label-form" for="email">Email:</label>
             <input class="input-form" type="email" id="email" name="email" required>
