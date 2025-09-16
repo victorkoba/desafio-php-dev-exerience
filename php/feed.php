@@ -27,11 +27,17 @@ if (isset($_POST['criar_post'])) {
     $imagem_nome = null;
 
     // Verificar se enviou imagem
-    if(isset($_FILES['imagem_post']) && $_FILES['imagem_post']['error'] == 0){
-        $ext = pathinfo($_FILES['imagem_post']['name'], PATHINFO_EXTENSION);
-        $imagem_nome = uniqid() . "." . $ext;
-        move_uploaded_file($_FILES['imagem_post']['tmp_name'], "uploads/" . $imagem_nome);
+if(isset($_FILES['imagem_post']) && $_FILES['imagem_post']['error'] == 0){
+    $ext = pathinfo($_FILES['imagem_post']['name'], PATHINFO_EXTENSION);
+    $imagem_nome = uniqid() . "." . $ext;
+
+    // Criar pasta caso não exista
+    if (!is_dir("uploads")) {
+        mkdir("uploads", 0777, true);
     }
+
+    move_uploaded_file($_FILES['imagem_post']['tmp_name'], "uploads/" . $imagem_nome);
+}
 
     $stmt = $conexao->prepare("INSERT INTO posts (id_usuario, texto_post, imagem_post) VALUES (?, ?, ?)");
     $stmt->bind_param("iss", $_SESSION['id_usuario'], $texto, $imagem_nome);
