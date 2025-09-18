@@ -3,7 +3,7 @@ session_start();
 include 'conexao.php';
 
 if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../index.php.php");
+    header('Location: ../index.php');
     exit;
 }
 
@@ -24,32 +24,30 @@ function alerta($tipo, $titulo, $msg, $redirecionar) {
 // Criar post
 if (isset($_POST['criar_post'])) {
     $texto = $_POST['texto_post'];
-    $imagem_data = null;
-    $imagem_tipo = null;
+    $imagem_nome = null;
 
-    // Verifica se enviou imagem
-    if (isset($_FILES['imagem_post']) && $_FILES['imagem_post']['error'] == 0) {
-        $imagem_data = file_get_contents($_FILES['imagem_post']['tmp_name']); // conteúdo binário
-        $imagem_tipo = $_FILES['imagem_post']['type']; // tipo MIME da imagem
+    // Verificar se enviou imagem
+if(isset($_FILES['imagem_post']) && $_FILES['imagem_post']['error'] == 0){
+    $ext = pathinfo($_FILES['imagem_post']['name'], PATHINFO_EXTENSION);
+    $imagem_nome = uniqid() . "." . $ext;
+
+    // Criar pasta caso não exista
+    if (!is_dir("uploads")) {
+        mkdir("uploads", 0777, true);
     }
 
-    // Preparar INSERT no banco com BLOB
-    $stmt = $conexao->prepare("INSERT INTO posts (id_usuario, texto_post, imagem_post, imagem_tipo) VALUES (?, ?, ?, ?)");
-    if ($stmt === false) {
-        die("Erro ao preparar a query: " . $conexao->error);
-    }
+    move_uploaded_file($_FILES['imagem_post']['tmp_name'], "uploads/" . $imagem_nome);
+}
 
-    $stmt->bind_param("isss", $_SESSION['id_usuario'], $texto, $imagem_data, $imagem_tipo);
-
-    if ($stmt->execute()) {
+    $stmt = $conexao->prepare("INSERT INTO posts (id_usuario, texto_post, imagem_post) VALUES (?, ?, ?)");
+    $stmt->bind_param("iss", $_SESSION['id_usuario'], $texto, $imagem_nome);
+    if($stmt->execute()){
         alerta('success', 'Post criado!', 'Seu post foi publicado.', 'feed.php');
-    } else {
-        alerta('error', 'Erro!', 'Não foi possível criar o post.', 'feed.php');
     }
-
     $stmt->close();
     exit;
 }
+
 // Editar post
 if (isset($_POST['editar_post'])) {
     $id_post = $_POST['id_post'];
@@ -281,9 +279,7 @@ h1 {text-align:center; color:#333; margin-bottom:30px; position:relative;}
 <body id="body-feed">
     <div class="container">
         <h1>Feed 
-            <a href="logout.php" class="logout">
-                <i class="fas fa-arrow-right-from-bracket"></i>
-            </a>
+            <a href="../index.php?logout=1" class="logout" onclick="return sairConfirm()"><i class="fas fa-arrow-right-from-bracket"></i></a>
         </h1>
 
         <!-- Criar post -->
@@ -307,8 +303,7 @@ h1 {text-align:center; color:#333; margin-bottom:30px; position:relative;}
                     <?php echo nl2br(htmlspecialchars($post['texto_post'])); ?>
                     <?php if($post['imagem_post']): ?>
                         <div style="margin-top:10px;">
-                            <img src="data:<?php echo $post['imagem_tipo']; ?>;base64,<?php echo base64_encode($post['imagem_post']); ?>" 
-                                alt="Imagem do post" style="max-width:100%; border-radius:8px;">
+                            <img src="uploads/<?php echo $post['imagem_post']; ?>" alt="Imagem do post" style="max-width:100%; border-radius:8px;">
                         </div>
                     <?php endif; ?>
                 </div>
@@ -371,6 +366,21 @@ function excluirConfirm() {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         return result.isConfirmed;
+    });
+}
+
+function sairConfirm() {
+    return Swal.fire({
+        title: 'Deseja sair?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sair',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href='../index.php?logout=1';
+        }
+        return false;
     });
 }
 </script>
