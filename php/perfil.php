@@ -92,7 +92,7 @@ header {
 /* ===== Perfil Container branco ===== */
 .perfil-container {
     max-width: 800px;
-    margin: 120px auto 50px auto; /* espaço topo para header fixo */
+    margin: 350px auto 50px auto; /* espaço topo para header fixo */
     padding: 20px;
     background: #ffffff; /* fundo branco */
     border-radius: 12px;
