@@ -3,7 +3,7 @@ session_start();
 include 'conexao.php';
 
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ../index.php');
+    header("Location: ../index.php");
     exit;
 }
 
@@ -303,7 +303,7 @@ h1 {text-align:center; color:#333; margin-bottom:30px; position:relative;}
                     <?php echo nl2br(htmlspecialchars($post['texto_post'])); ?>
                     <?php if($post['imagem_post']): ?>
                         <div style="margin-top:10px;">
-                            <img src="uploads/<?php echo $post['imagem_post']; ?>" alt="Imagem do post" style="max-width:100%; border-radius:8px;">
+                            <center><img src="uploads/<?php echo $post['imagem_post']; ?>" alt="Imagem do post" style="max-width:100%; border-radius:8px;"></center>
                         </div>
                     <?php endif; ?>
                 </div>

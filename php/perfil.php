@@ -8,7 +8,7 @@ if (!$id_usuario) {
 }
 
 // Busca dados do usuário (incluindo foto)
-$sql = "SELECT email_usuario, foto_perfil FROM usuarios WHERE id_usuario = ?";
+$sql = "SELECT id_usuario, email_usuario, foto_perfil FROM usuarios WHERE id_usuario = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
@@ -21,8 +21,8 @@ if (!$usuario) {
     die("Usuário não encontrado.");
 }
 
-$temFoto = !empty($usuario['foto_perfil']);
-$foto = $temFoto ? "uploads/" . $usuario['foto_perfil'] : "";
+// Se não tiver foto, mostra padrão
+$foto = !empty($usuario['foto_perfil']) ? $usuario['foto_perfil'] : "../img/logo-tasksync.png";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -92,7 +92,7 @@ header {
 /* ===== Perfil Container branco ===== */
 .perfil-container {
     max-width: 800px;
-    margin: 120px auto 50px auto; /* espaço topo para header fixo */
+    margin: 350px auto 50px auto; /* espaço topo para header fixo */
     padding: 20px;
     background: #ffffff; /* fundo branco */
     border-radius: 12px;
@@ -154,68 +154,25 @@ header {
 </style>
 </head>
 <body>
-
-<header>
-    <nav>
-        <div id="header-div">
-            <a href="feed.php"><img id="img-logo-header" src="../img/logo.png" alt="Logo"></a>
-            <ul>
-                <a href="feed.php"><li>Feed</li></a>
-                <a href="perfil.php"><li>Perfil</li></a>
-                <a href="chat.php"><li>Chat</li></a>
-                <a href="amigos.php"><li>Amigos</li></a>
-            </ul>
-        </div>
-    </nav>
-</header>
-
 <div class="perfil-container">
-    <h2>Meu Perfil
-        <i class="fas fa-arrow-right-from-bracket logout" onclick="sairConfirm()"></i>
-    </h2>
-
-    <div class="foto-perfil-container">
-        <form action="upload-foto.php" method="POST" enctype="multipart/form-data" id="form-foto">
-            <div class="foto-perfil-circle" id="foto-perfil-circle">
-                <?php if ($temFoto): ?>
-                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto de perfil" id="foto-perfil">
-                <?php else: ?>
-                    <span class="foto-text">Foto de Perfil</span>
-                <?php endif; ?>
-            </div>
-            <input type="file" name="foto_perfil" id="input-foto" accept="image/*" style="display:none" onchange="document.getElementById('form-foto').submit()">
-        </form>
-    </div>
+    <h2>Meu Perfil</h2>
+    
+    <form action="upload-foto.php" method="post" enctype="multipart/form-data">
+        <label class="foto-label">
+            <img id="preview-img" src="<?php echo htmlspecialchars($foto); ?>" alt="Foto de perfil" class="foto-perfil">
+            <input type="file" name="foto" accept="image/*" onchange="previewFoto(event)">
+        </label>
+    </form>
 
     <div class="perfil-info">
         <p><span>Email:</span> <?php echo htmlspecialchars($usuario['email_usuario']); ?></p>
+        <p><span>ID:</span> <?php echo htmlspecialchars($usuario['id_usuario']); ?></p>
     </div>
 
     <div class="acoes">
-        <a href="editar-perfil.php"><i class="fas fa-edit"></i> Editar Perfil</a>
+        <a href="editar-perfil.php">Editar Perfil</a>
+        <a href="feed.php" class="sair">Voltar</a>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.getElementById('foto-perfil-circle').addEventListener('click', function() {
-    document.getElementById('input-foto').click();
-});
-
-function sairConfirm() {
-    Swal.fire({
-        title: 'Deseja sair?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sair',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if(result.isConfirmed){
-            window.location.href='../index.php?logout=1';
-        }
-    });
-}
-</script>
-
 </body>
 </html>
