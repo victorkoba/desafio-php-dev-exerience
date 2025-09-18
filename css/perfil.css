@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.perfil-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 320px;
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.perfil-container img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #2a5298;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perfil-container img:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 12px rgba(42, 82, 152, 0.4);
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #2a5298;
+}
+
+p {
+    color: #555;
+    margin: 5px 0 20px 0;
+}
+
+.acoes-perfil {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.acoes-perfil a {
+    flex: 1;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #fff;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.button-editar {
+    background: #2a5298;
+}
+
+.button-editar:hover {
+    background: #1e3c72;
+}
+
+.button-sair {
+    background: #e63946;
+}
+
+.button-sair:hover {
+    background: #b71c1c;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
