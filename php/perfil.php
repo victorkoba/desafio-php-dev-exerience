@@ -7,7 +7,41 @@ if (!$id_usuario) {
     die("Usuário não está logado.");
 }
 
-// Busca dados do usuário (incluindo foto)
+$alerta = null;
+
+// ===================
+// PROCESSAR UPLOAD
+// ===================
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['foto_perfil'])) {
+    if ($_FILES['foto_perfil']['error'] === UPLOAD_ERR_OK) {
+        $extensao = strtolower(pathinfo($_FILES['foto_perfil']['name'], PATHINFO_EXTENSION));
+        $permitidas = ['jpg','jpeg','png','gif'];
+
+        if (!in_array($extensao, $permitidas)) {
+            $alerta = "tipo_invalido";
+        } else {
+            $novo_nome = uniqid('perfil_', true) . '.' . $extensao;
+            $caminho_destino = __DIR__ . '/uploads/' . $novo_nome;
+
+            if (move_uploaded_file($_FILES['foto_perfil']['tmp_name'], $caminho_destino)) {
+                $sql = "UPDATE usuarios SET foto_perfil = ? WHERE id_usuario = ?";
+                $stmt = $conexao->prepare($sql);
+                $stmt->bind_param("si", $novo_nome, $id_usuario);
+                $stmt->execute();
+                $stmt->close();
+                $alerta = "sucesso";
+            } else {
+                $alerta = "erro_upload";
+            }
+        }
+    } else {
+        $alerta = "erro_upload";
+    }
+}
+
+// ===================
+// BUSCAR USUÁRIO
+// ===================
 $sql = "SELECT email_usuario, foto_perfil FROM usuarios WHERE id_usuario = ?";
 $stmt = $conexao->prepare($sql);
 $stmt->bind_param("i", $id_usuario);
@@ -32,6 +66,7 @@ $foto = $temFoto ? "uploads/" . $usuario['foto_perfil'] : "";
 <title>Perfil - LinkUp</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="../css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
 /* Header azul igual feed.php */
 header {
@@ -94,7 +129,7 @@ header {
     max-width: 800px;
     margin: 350px auto 50px auto; /* espaço topo para header fixo */
     padding: 20px;
-    background: #ffffff; /* fundo branco */
+    background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     text-align: center;
@@ -175,7 +210,7 @@ header {
     </h2>
 
     <div class="foto-perfil-container">
-        <form action="upload-foto.php" method="POST" enctype="multipart/form-data" id="form-foto">
+        <form method="POST" enctype="multipart/form-data" id="form-foto">
             <div class="foto-perfil-circle" id="foto-perfil-circle">
                 <?php if ($temFoto): ?>
                     <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto de perfil" id="foto-perfil">
@@ -196,7 +231,6 @@ header {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.getElementById('foto-perfil-circle').addEventListener('click', function() {
     document.getElementById('input-foto').click();
@@ -215,6 +249,15 @@ function sairConfirm() {
         }
     });
 }
+
+// Alerta de upload
+<?php if ($alerta === "sucesso"): ?>
+Swal.fire({ icon: 'success', title: 'Foto atualizada!', timer: 2000, showConfirmButton: false })
+<?php elseif ($alerta === "erro_upload"): ?>
+Swal.fire({ icon: 'error', title: 'Erro no upload!', text: 'Tente novamente.' })
+<?php elseif ($alerta === "tipo_invalido"): ?>
+Swal.fire({ icon: 'warning', title: 'Formato inválido!', text: 'Use JPG, JPEG, PNG ou GIF.' })
+<?php endif; ?>
 </script>
 
 </body>
