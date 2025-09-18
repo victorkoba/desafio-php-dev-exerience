@@ -30,83 +30,149 @@ $foto = $temFoto ? "uploads/" . $usuario['foto_perfil'] : "";
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perfil - LinkUp</title>
-<link rel="stylesheet" href="../css/perfil.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="../css/style.css">
 <style>
-    .perfil-container {
-        max-width: 400px;
-        margin: 50px auto;
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
+/* Header azul igual feed.php */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #0056b3, #007bff);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
 
-    .foto-perfil-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
+#header-div {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
 
-    .foto-perfil-circle {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        border: 3px solid #007bff;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: 0.3s;
-        background-color: #f0f0f0; /* cor de fundo quando não há foto */
-    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-    .foto-perfil-circle:hover {
-        opacity: 0.8;
-    }
+#img-logo-header {
+    height: 60px;
+}
 
-    .foto-perfil-circle img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+#header-div ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
 
-    .foto-text {
-        text-align: center;
-        color: #007bff;
-        font-weight: bold;
-        padding: 10px;
-    }
+#header-div ul a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    transition: 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
 
-    .perfil-info {
-        margin-top: 20px;
-        text-align: left;
-    }
+#header-div ul a:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 
-    .perfil-info span {
-        font-weight: bold;
-    }
+/* Logout estilo igual feed.php */
+.logout {
+    font-size:20px;
+    color:white;
+    cursor:pointer;
+}
+.logout:hover { color:#ffc107; }
 
-    .acoes {
-        margin-top: 20px;
-    }
+/* ===== Perfil Container branco ===== */
+.perfil-container {
+    max-width: 800px;
+    margin: 120px auto 50px auto; /* espaço topo para header fixo */
+    padding: 20px;
+    background: #ffffff; /* fundo branco */
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-    .acoes a {
-        text-decoration: none;
-        color: white;
-        background-color: #007bff;
-        padding: 10px 20px;
-        border-radius: 5px;
-        transition: 0.3s;
-    }
+/* Foto de perfil redonda */
+.foto-perfil-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.foto-perfil-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:0.3s;
+    background-color: #f0f0f0;
+}
+.foto-perfil-circle:hover { opacity: 0.8; }
+.foto-perfil-circle img { width: 100%; height: 100%; object-fit: cover; }
+.foto-text { color: #007bff; font-weight: bold; text-align: center; }
 
-    .acoes a:hover {
-        background-color: #0056b3;
-    }
+/* Informações do usuário */
+.perfil-info {
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+}
+.perfil-info span { font-weight: bold; }
+
+/* Botão editar */
+.acoes {
+    margin-top: 20px;
+}
+.acoes a {
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.acoes a:hover { background-color: #0056b3; }
+
+/* Responsividade */
+@media (max-width:600px){
+    .perfil-container { margin: 140px 10px 50px 10px; padding: 15px; }
+    #header-div ul { flex-direction: column; gap: 10px; }
+}
 </style>
 </head>
 <body>
 
+<header>
+    <nav>
+        <div id="header-div">
+            <a href="feed.php"><img id="img-logo-header" src="../img/logo.png" alt="Logo"></a>
+            <ul>
+                <a href="feed.php"><li>Feed</li></a>
+                <a href="perfil.php"><li>Perfil</li></a>
+                <a href="chat.php"><li>Chat</li></a>
+                <a href="amigos.php"><li>Amigos</li></a>
+            </ul>
+        </div>
+    </nav>
+</header>
+
 <div class="perfil-container">
-    <h2>Meu Perfil</h2>
+    <h2>Meu Perfil
+        <i class="fas fa-arrow-right-from-bracket logout" onclick="sairConfirm()"></i>
+    </h2>
 
     <div class="foto-perfil-container">
         <form action="upload-foto.php" method="POST" enctype="multipart/form-data" id="form-foto">
@@ -126,15 +192,29 @@ $foto = $temFoto ? "uploads/" . $usuario['foto_perfil'] : "";
     </div>
 
     <div class="acoes">
-        <a href="editar-perfil.php">Editar Perfil</a>
+        <a href="editar-perfil.php"><i class="fas fa-edit"></i> Editar Perfil</a>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Clicar no círculo da foto abre o seletor de arquivos
-    document.getElementById('foto-perfil-circle').addEventListener('click', function() {
-        document.getElementById('input-foto').click();
+document.getElementById('foto-perfil-circle').addEventListener('click', function() {
+    document.getElementById('input-foto').click();
+});
+
+function sairConfirm() {
+    Swal.fire({
+        title: 'Deseja sair?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sair',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href='../index.php?logout=1';
+        }
     });
+}
 </script>
 
 </body>
