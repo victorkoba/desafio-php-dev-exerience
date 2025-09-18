@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="body-cadastro-login">
    <div class="container-cadastro-login">
     <form class="form-cadastro-login" action="" method="POST">
-        <img class="logo-linkup" src="./img/logo-com-nome.png" alt="Logo LinkUp">
+        <center><img class="logo-linkup" src="./img/logo-com-nome.png" alt="Logo LinkUp"></center>
         <h1 class="h1-login-cadastro">Entrar na sua conta</h1>
 
         <label class="label-form" for="email">Email:</label>
@@ -93,9 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="alinhamento-button">
             <button class="button-entrar" type="submit">Entrar</button>
         </div>
-
-        <a id="texto-cadastro" href="./php/esqueceu-senha.php">Esqueceu a senha?</a>
-        <a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Fazer cadastro</a>
+        <br>
+        <center><a id="texto-cadastro" href="./php/recuperar-senha.php">Esqueceu a senha?</a></center>
+        <br>
+        <center><a id="texto-cadastro" href="./php/cadastro.php">Não tem uma conta? Fazer cadastro</a></center>
     </form>
    </div>
 </body>

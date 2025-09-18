@@ -94,8 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="alinhamento-button">
             <button class="button-entrar" type="submit">Cadastrar</button>
         </div>
-
-        <a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a>
+        
+        <br>
+        <center><a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a></center>
     </form>
    </div>
 </body>
