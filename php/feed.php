@@ -127,12 +127,13 @@ $posts = $conexao->query("
     <meta charset="UTF-8">
     <title>Feed - LinkUp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
         * {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
         body {background:#f0f2f5;padding:20px;}
-        .container {max-width:800px;margin:auto;}
+        .container {max-width:800px;margin:auto;margin-top: 100px;}
         h1 {text-align:center;color:#333;margin-bottom:20px;}
-        .logout {float:right;font-size:20px;color:#555;transition:0.3s;}
+        .logout {float:right;font-size:20px;color:#555;transition:0.3s;margin-top: 10px;}
         .logout:hover {color:#d9534f;}
         .novo-post textarea {width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;font-size:14px;resize:none;}
         .novo-post input[type=file] {margin-bottom:10px;}
@@ -160,6 +161,19 @@ $posts = $conexao->query("
         @media (max-width:600px){body{padding:10px;}.acoes{flex-direction:column;align-items:flex-start;}.editar{flex-direction:column;}}
     </style>
 </head>
+<header>
+    <nav>
+        <div id="header-div">
+            <a href="feed.php"><img id="img-logo-header" src="../img/logo.png" alt=""></a>
+        <ul>
+            <a href="feed.php"><li>Feed</li></a>
+            <a href="perfil.php"><li>Perfil</li></a>
+            <a href="chat.php"><li>Chat</li></a>
+            <a href="amigos.php"><li>Amigos</li></a>
+        </ul>
+        </div>
+    </nav>
+</header>
 <body>
     <div class="container">
         <h1>Feed 
