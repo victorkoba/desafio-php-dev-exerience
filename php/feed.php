@@ -130,38 +130,140 @@ $posts = $conexao->query("
     <title>Feed - LinkUp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        * {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-        body {background:#f0f2f5;padding:20px;}
-        .container {max-width:800px;margin:auto;margin-top: 100px;}
-        h1 {text-align:center;color:#333;margin-bottom:20px;}
-        .logout {float:right;font-size:20px;color:#555;transition:0.3s;margin-top: 10px;}
-        .logout:hover {color:#d9534f;}
-        .novo-post textarea {width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:10px;font-size:14px;resize:none;}
-        .novo-post input[type=file] {margin-bottom:10px;}
-        .novo-post button {background:#007bff;color:white;border:none;padding:10px 15px;border-radius:8px;cursor:pointer;transition:0.3s;}
-        .novo-post button:hover {background:#0056b3;}
-        .post {background:white;padding:15px;margin-bottom:20px;border-radius:12px;box-shadow:0 4px 8px rgba(0,0,0,0.1);}
-        .post-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-        .post-header strong {color:#333;}
-        .post-content {margin-bottom:10px;font-size:15px;color:#444;}
-        .acoes {display:flex;gap:15px;font-size:14px;margin-bottom:10px;}
-        .acoes a {color:#555;text-decoration:none;display:flex;align-items:center;gap:5px;transition:0.3s;}
-        .acoes a:hover {color:#007bff;}
-        .comentarios {margin-top:10px;padding-left:10px;border-left:2px solid #eee;}
-        .comentarios p {margin-bottom:5px;font-size:14px;color:#555;}
-        .comentarios form {display:flex;gap:5px;margin-top:5px;}
-        .comentarios input[type=text] {flex:1;padding:6px 10px;border-radius:6px;border:1px solid #ccc;font-size:14px;}
-        .comentarios button {padding:6px 10px;background:#28a745;border:none;color:white;border-radius:6px;cursor:pointer;transition:0.3s;}
-        .comentarios button:hover {background:#218838;}
-        .editar {margin-top:10px;display:flex;gap:5px;}
-        .editar textarea {flex:1;padding:6px;border-radius:6px;border:1px solid #ccc;font-size:14px;}
-        .editar button {background:#ffc107;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;transition:0.3s;}
-        .editar button:hover {background:#e0a800;}
-        .excluir {color:#d9534f;text-decoration:none;font-size:14px;transition:0.3s;margin-left:5px;}
-        .excluir:hover {text-decoration:underline;}
-        @media (max-width:600px){body{padding:10px;}.acoes{flex-direction:column;align-items:flex-start;}.editar{flex-direction:column;}}
-    </style>
+<style>
+/* Reset e fonte */
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif;}
+#body-feed {background:#f0f2f5; padding:20px;}
+.container {max-width:800px; margin:auto; margin-top:100px;}
+
+/* Header */
+h1 {text-align:center; color:#333; margin-bottom:30px; position:relative;}
+.logout {position:absolute; right:0; top:0; font-size:22px; color:#555; transition:0.3s;}
+.logout:hover {color:#d9534f;}
+
+/* Novo post */
+.novo-post {background:white; padding:15px; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.1); margin-bottom:30px;}
+.novo-post textarea {width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px; resize:none; margin-bottom:10px;}
+.novo-post input[type=file] {
+    display:none;
+}
+.upload-label {
+    display:inline-block;
+    padding:8px 15px;
+    background:#007bff;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+    margin-bottom:10px;
+}
+.upload-label:hover {background:#0056b3;}
+.novo-post button {background:#28a745; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; transition:0.3s; margin-left:5px;}
+.novo-post button:hover {background:#218838;}
+
+/* Post */
+.post {background:white; padding:20px; margin-bottom:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.post-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.post-header strong {color:#333;}
+.post-content {margin-bottom:15px; font-size:15px; color:#444;}
+.post-content img {max-width:100%; border-radius:8px; margin-top:10px;}
+
+/* Ações */
+.acoes {display:flex; gap:15px; font-size:14px; margin-bottom:10px; align-items:center;}
+.acoes a {color:#555; text-decoration:none; display:flex; align-items:center; gap:5px; transition:0.3s;}
+.acoes a:hover {color:#007bff;}
+.acoes a.curtido {color:#e0245e; font-weight:bold;}
+
+/* Comentários */
+.comentarios {margin-top:10px; padding-left:10px; border-left:2px solid #eee;}
+.comentarios p {margin-bottom:5px; font-size:14px; color:#555;}
+.comentarios form {display:flex; gap:5px; margin-top:5px;}
+.comentarios input[type=text] {flex:1; padding:6px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px;}
+.comentarios button {padding:6px 10px; background:#007bff; border:none; color:white; border-radius:6px; cursor:pointer; transition:0.3s;}
+.comentarios button:hover {background:#0056b3;}
+
+/* Editar/Excluir posts */
+.editar {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.editar form {
+    flex: 1; /* textarea ocupa o máximo possível */
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.editar textarea {
+    flex: 1;
+    min-height: 60px; /* altura confortável para edição */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: vertical; /* permite redimensionar só vertical */
+    transition: 0.3s;
+}
+
+.editar textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+.editar button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+    height: 40px;
+}
+
+.editar button:hover {
+    background: #0056b3;
+}
+
+/* Botão de excluir */
+.excluir {
+    color: #d9534f;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+    margin-left: auto; /* empurra para direita */
+}
+
+.excluir:hover {
+    text-decoration: underline;
+}
+
+/* Ícones de editar/excluir */
+.editar i, .excluir i {
+    margin-right: 0;
+    font-size: 16px;
+}
+
+
+/* Responsivo */
+@media (max-width:600px){
+    body{padding:10px;}
+    .acoes{flex-direction:column; align-items:flex-start;}
+    .editar{flex-direction:column; align-items:flex-start;}
+}
+</style>
+
 </head>
 <header>
     <nav>
@@ -176,7 +278,7 @@ $posts = $conexao->query("
         </div>
     </nav>
 </header>
-<body>
+<body id="body-feed">
     <div class="container">
         <h1>Feed 
             <a href="logout.php" class="logout">
@@ -188,7 +290,8 @@ $posts = $conexao->query("
         <div class="novo-post">
             <form method="POST" enctype="multipart/form-data">
                 <textarea name="texto_post" placeholder="O que você está pensando?" required></textarea>
-                <input type="file" name="imagem_post" accept="image/*">
+                <label class="upload-label" for="imagem_post"><i class="fas fa-image"></i> Escolher imagem</label>
+                <input type="file" name="imagem_post" id="imagem_post" accept="image/*">
                 <button type="submit" name="criar_post"><i class="fas fa-paper-plane"></i> Postar</button>
             </form>
         </div>
@@ -248,6 +351,7 @@ $posts = $conexao->query("
                             <i class="fas fa-trash"></i> Excluir
                         </a>
                     </div>
+
                 <?php endif; ?>
             </div>
         <?php endwhile; ?>
