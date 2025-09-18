@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     icon: 'error',
                     title: 'Erro',
                     text: 'E-mail já cadastrado!'
-                }).then(() => window.location.href = 'cadastro-usuario.php');
+                }).then(() => window.location.href = 'cadastro.php');
             </script>
         </body>
         </html>";
