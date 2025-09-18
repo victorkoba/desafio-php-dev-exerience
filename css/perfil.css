@@ -1,0 +1,90 @@
+body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .perfil-container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        width: 320px;
+        text-align: center;
+    }
+    .perfil-container h2 {
+        margin-bottom: 20px;
+        color: #2a5298;
+    }
+    /* Foto de perfil com ícone de câmera */
+    .foto-label {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+    .foto-perfil {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #2a5298;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .foto-label:hover .foto-perfil {
+        transform: scale(1.05);
+        box-shadow: 0 0 12px rgba(42,82,152,0.6);
+    }
+    .foto-label::after {
+        content: "📷";
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: #2a5298;
+        color: #fff;
+        font-size: 16px;
+        padding: 6px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        transition: background 0.3s;
+    }
+    .foto-label:hover::after { background: #1e3c72; }
+    input[type="file"] { display: none; }
+
+    /* Informações do usuário */
+    .perfil-info {
+        background: #f0f2f5;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    .perfil-info p {
+        margin: 8px 0;
+        font-size: 15px;
+        color: #333;
+    }
+    .perfil-info span {
+        font-weight: bold;
+        color: #2a5298;
+    }
+
+    /* Botões */
+    .acoes a {
+        display: inline-block;
+        margin: 5px 5px 0 5px;
+        padding: 10px 15px;
+        background: #2a5298;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background 0.3s;
+    }
+    .acoes a:hover { background: #1e3c72; }
+    .acoes a.sair {
+        background: #e63946;
+    }
+    .acoes a.sair:hover { background: #b71c1c; }
