@@ -4,6 +4,15 @@ include 'conexao.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    $nome = $_POST['nome_usuario'];
+    $foto = null;
+    $foto_type = null;
+
+    // Processa a imagem de perfil, se enviada
+    if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['error'] === 0) {
+        $foto = file_get_contents($_FILES['foto_usuario']['tmp_name']);
+        $foto_type = $_FILES['foto_usuario']['type']; // Pode salvar tipo MIME se quiser
+    }
 
     // Criptografa a senha
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
@@ -36,11 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Insere o novo usuário
-    $sql = "INSERT INTO usuarios (email_usuario, senha_usuario) VALUES (?, ?)";
+    $sql = "INSERT INTO usuarios (nome_usuario, email_usuario, senha_usuario, foto_usuario) VALUES (?, ?, ?, ?)";
     $stmt = $conexao->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("ss", $email, $senha_hash);
+        $stmt->bind_param("ssss", $nome, $email, $senha_hash, $foto);
         if ($stmt->execute()) {
             echo "<!DOCTYPE html>
             <html lang='pt-br'>
@@ -71,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -81,23 +91,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="body-cadastro-login">
    <div class="container-cadastro-login">
-    <form class="form-cadastro-login" action="" method="POST">
-        <img class="logo-linkup" src="../img/logo-com-nome.png" alt="Logo LinkUp">
-        <h1 class="h1-login-cadastro">Criar uma conta</h1>
+    <form class="form-cadastro-login" action="" method="POST" enctype="multipart/form-data">
+    <img class="logo-linkup" src="../img/logo-com-nome.png" alt="Logo LinkUp">
+    <h1 class="h1-login-cadastro">Criar uma conta</h1>
 
-        <label class="label-form" for="email">Email:</label>
-        <input class="input-form" type="email" id="email" name="email" placeholder="Digite seu email" required>
+    <label class="label-form" for="nome_usuario">Nome:</label>
+    <input class="input-form" type="text" id="nome_usuario" name="nome_usuario" placeholder="Digite seu nome" required>
 
-        <label class="label-form" for="senha">Senha:</label>
-        <input class="input-form" type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+    <label class="label-form" for="email">Email:</label>
+    <input class="input-form" type="email" id="email" name="email" placeholder="Digite seu email" required>
 
-        <div class="alinhamento-button">
-            <button class="button-entrar" type="submit">Cadastrar</button>
-        </div>
-        
-        <br>
-        <center><a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a></center>
-    </form>
+    <label class="label-form" for="senha">Senha:</label>
+    <input class="input-form" type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+
+    <label class="label-form" for="foto_usuario">Foto de perfil:</label>
+    <input class="input-form" type="file" id="foto_usuario" name="foto_usuario" accept="image/*">
+
+    <div class="alinhamento-button">
+        <button class="button-entrar" type="submit">Cadastrar</button>
+    </div>
+    
+    <br>
+    <center><a id="texto-cadastro" href="../index.php">Já tem cadastro? Entrar na sua conta</a></center>
+</form>
+
    </div>
 </body>
 </html>

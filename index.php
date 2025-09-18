@@ -6,68 +6,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['senha'];
 
-    // Consulta correta com os nomes das colunas do banco
+    // Verifica conexão
+    if ($conexao->connect_error) {
+        die("Erro na conexão: " . $conexao->connect_error);
+    }
+
+    // Prepara a query
     $sql = "SELECT * FROM usuarios WHERE email_usuario = ?";
     $stmt = $conexao->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
 
-        if ($result && $result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+    if (!$stmt) {
+        die("Erro no prepare: " . $conexao->error);
+    }
 
-            // Verifica senha
-            if (password_verify($password, $user['senha_usuario'])) {
-                $_SESSION['usuario'] = $user['email_usuario']; // pode ser usado como nome
-                $_SESSION['id_usuario'] = $user['id_usuario'];
-                $_SESSION['tipo'] = $user['tipo_usuario'];
+    // Executa a query
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-                header('Location: ./php/feed.php'); // redireciona para feed
-                exit;
-            } else {
-                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function(){
-                        Swal.fire({
-                            title: 'Senha incorreta!',
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        }).then(() => window.location.href = 'index.php');
-                    });
-                </script>";
-            }
+    if ($result && $result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+
+        if (password_verify($password, $user['senha_usuario'])) {
+            $_SESSION['usuario'] = $user['email_usuario'];
+            $_SESSION['id_usuario'] = $user['id_usuario'];
+            $_SESSION['tipo'] = $user['tipo_usuario'];
+
+            header('Location: ./php/feed.php');
+            exit;
         } else {
             echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
             <script>
                 document.addEventListener('DOMContentLoaded', function(){
                     Swal.fire({
-                        title: 'Usuário não encontrado!',
-                        icon: 'error',
-                        confirmButtonText: 'Tente fazer um cadastro'
-                    }).then(() => window.location.href = './php/cadastro.php');
+                        title: 'Senha incorreta!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => window.location.href = 'index.php');
                 });
             </script>";
         }
-
-        $stmt->close();
     } else {
-        // Em caso de erro ao preparar a query
         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
         <script>
             document.addEventListener('DOMContentLoaded', function(){
                 Swal.fire({
-                    title: 'Erro no servidor',
-                    text: 'Tente novamente mais tarde.',
+                    title: 'Usuário não encontrado!',
                     icon: 'error',
-                    confirmButtonText: 'OK'
-                }).then(() => window.location.href = 'index.php');
+                    confirmButtonText: 'Tente fazer um cadastro'
+                }).then(() => window.location.href = './php/cadastro.php');
             });
         </script>";
     }
 
+    $stmt->close();
     $conexao->close();
 }
+
 ?>
 
 <!DOCTYPE html>

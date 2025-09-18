@@ -168,7 +168,7 @@ header {
         <form method="POST" enctype="multipart/form-data" id="form-foto">
             <div class="foto-perfil-circle" id="foto-perfil-circle">
                 <?php if ($temFoto): ?>
-                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto de perfil" id="foto-perfil">
+                    <img src="<?php echo htmlspecialchars($foto); ?>"  id="foto-perfil">
                 <?php else: ?>
                     <span class="foto-text">Foto de Perfil</span>
                 <?php endif; ?>
